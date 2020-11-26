@@ -1,0 +1,60 @@
+body {
+  background-color: #ffe9e3;
+}
+
+.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.card-up {
+  position: relative;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.row {
+  margin-bottom: 30px;
+}
+
+.result {
+  position: absolute;
+  z-index: 999;
+  top: 100%;
+  left: 0;
+}
+
+input[type="text"],
+.result {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+/* Formatting result items */
+.result .media {
+  margin: 0;
+  padding: 7px 10px;
+  border: 1px solid #cccccc;
+  border-top: none;
+  cursor: pointer;
+}
+
+.result .media:hover {
+  background: #f2f2f2;
+}
+
+/*                       FOOTER                       */
+footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: #eee1c6;
+  text-align: center;
+  font-size: 0.75em;
+  padding: 10px;
+  background: #222;
+  border-top: 1px solid #eee;
+}

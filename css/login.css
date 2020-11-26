@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background-color: #3498db;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 100%;
+
+  font-family: "Roboto", sans-serif;
+}
+
+.error {
+  position: fixed;
+  top: 5%;
+  left: 40%;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #730303;
+  background: #de9595;
+  color: #730303;
+  font-size: 1.1em;
+  padding: 4px 10px;
+  width: 300px;
+}
+
+/*                     FORM                   */
+.box {
+  padding: 40px;
+  width: 350px;
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  background: rgba(25, 25, 25, 0.7);
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+}
+
+.box h1 {
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 3em;
+  border-bottom: 6px solid #2ecc71;
+  float: left;
+  padding-bottom: 13px 0;
+  margin-bottom: 50px;
+}
+
+.box .area {
+  font-size: 1em;
+  width: 100%;
+  overflow: hidden;
+  padding: 8px 0;
+  margin: 8px 0;
+  border-bottom: 2px solid #3498db;
+  transition-duration: 0.25s;
+  color: #ccc;
+}
+
+.box .area i {
+  width: 26px;
+  float: left;
+  text-align: center;
+}
+
+.box .area input[type="text"],
+.box .area input[type="password"] {
+  border: none;
+  background: none;
+  outline: none;
+  color: #ccc;
+  float: left;
+  margin: 0 10px;
+}
+
+.box input[type="submit"] {
+  border: 2px solid #2ecc71;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  padding: 14px 40px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition-duration: 0.25s;
+  cursor: pointer;
+}
+
+.box input[type="submit"]:hover {
+  background: #2ecc71;
+}
+
+.box p {
+  color: #ccc;
+  font-size: 1em;
+  text-align: center;
+}
+
+.box p a {
+  text-decoration: underline;
+  color: #3498db;
+}
+
+/*                       FOOTER                       */
+footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: #eee1c6;
+  text-align: center;
+  font-size: 0.75em;
+  padding: 10px;
+  background: #222;
+  border-top: 1px solid #eee;
+}
