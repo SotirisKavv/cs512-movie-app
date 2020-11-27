@@ -1,0 +1,62 @@
+version: "2"
+services:
+  db:
+    container_name: mysql-db
+    build:
+      content: './mysql/'
+      args:
+        - MYSQL_V="${MYSQL_V}"
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      -backend
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+  php:
+    container_name: php
+    build:
+      content: './php/'
+      args:
+        - PHP_V="${PHP_V}"
+    networks:
+      - backend
+    volumes:
+      - ./public/:/var/www/html
+  apache:
+    container_name: apache
+    build:
+      content: './apache/'
+      args:
+        - APACHE_V="${APACHE_V}"
+    networks:
+      -backend
+    links:
+      - php:php
+      - mysql-db:mysql-db
+    ports:
+      - 8080:80
+    volumes:
+      - ./public/:/var/www/html
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - mysql-db:mysql-db
+    ports:
+      - 8000:80
+    networks:
+      - backend
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+networks:
+  backend:
+volumes:
+  data:
