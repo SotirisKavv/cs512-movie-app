@@ -1,4 +1,4 @@
-<?php 
+<?php
     class User {
 
         private $conn;
@@ -26,7 +26,7 @@
         }
 
         public function createUser() {
-            $sql = "INSERT INTO 
+            $sql = "INSERT INTO
                    ". $this->db_table ."
                     SET
                     name = :name,
@@ -37,8 +37,12 @@
                     role = :role,
                     confirmed = :confirmed
                    ";
-            
+
+            // echo $sql;
+
             $stmt = $this->conn->prepare($sql);
+            // 
+            // echo print_r($this);
 
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->surname=htmlspecialchars(strip_tags($this->surname));
@@ -47,7 +51,7 @@
             $this->email=htmlspecialchars(strip_tags($this->email));
             $this->role=htmlspecialchars(strip_tags($this->role));
             $this->confirmed=htmlspecialchars(strip_tags($this->confirmed));
-        
+
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":surname", $this->surname);
             $stmt->bindParam(":username", $this->username);
@@ -63,9 +67,9 @@
         }
 
         public function getUserByUsrname() {
-            $sql = "SELECT * FROM " . $this->db_table . " 
+            $sql = "SELECT * FROM " . $this->db_table . "
                     WHERE username = ? LIMIT 0,1;";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(1, $this->username);
 
@@ -84,9 +88,9 @@
         }
 
         public function getUserById() {
-            $sql = "SELECT * FROM " . $this->db_table . " 
+            $sql = "SELECT * FROM " . $this->db_table . "
                     WHERE id = ? LIMIT 0,1;";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(1, $this->id);
 
@@ -103,9 +107,9 @@
             $this->role = $dataRow['role'];
             $this->confirmed = $dataRow['confirmed'];
         }
-        
+
         public function updateUser() {
-            $sql = "UPDATE 
+            $sql = "UPDATE
                    ". $this->db_table ."
                     SET
                     name = :name,
@@ -118,7 +122,7 @@
                     WHERE
                     id = :id
                     ";
-            
+
             $stmt = $this->conn->prepare($sql);
 
             $this->name=htmlspecialchars(strip_tags($this->name));
@@ -129,7 +133,7 @@
             $this->role=htmlspecialchars(strip_tags($this->role));
             $this->confirmed=htmlspecialchars(strip_tags($this->confirmed));
             $this->id=htmlspecialchars(strip_tags($this->id));
-        
+
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":surname", $this->surname);
             $stmt->bindParam(":username", $this->username);
@@ -148,11 +152,11 @@
         public function deleteUser() {
             $sql = "DELETE FROM " . $this->db_table . " WHERE id = ?";
             $stmt = $this->conn->prepare($sql);
-        
+
             $this->id=htmlspecialchars(strip_tags($this->id));
-        
+
             $stmt->bindParam(1, $this->id);
-        
+
             if($stmt->execute()){
                 return true;
             }

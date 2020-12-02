@@ -43,11 +43,15 @@
         $user->email = $email;
         $user->role = $role;
         $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->confirmed = 0;
 
-        $user->createUser();
-            
-        header("Location: ../index.php");
-        exit();
+        if ($user->createUser()) {
+          header("Location: ../index.php");
+          exit();
+        } else {
+          header("Location: ../signup.php?error=SQLerror");
+          exit();
+        }
       }
     }
   } else {

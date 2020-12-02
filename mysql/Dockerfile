@@ -1,4 +1,4 @@
-ARGS MYSQL_V=""
+ARG MYSQL_V=""
 FROM mysql:${MYSQL_V:-latest}
 
-ADD initDB.sql /docker-entrypoint-initdb.d
+COPY ./sql_script/ /docker-entrypoint-initdb.d/

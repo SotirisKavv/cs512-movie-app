@@ -1,15 +1,15 @@
 <?php
     class Database {
-        private $servername = "localhost";
+        private $servername = "db";
         private $username = "root";
-        private $password = "toor";
+        private $password = "rootpassword";
         private $db_name = "moviedb";
 
         public $conn;
 
         public function getConnection() {
             $this->conn = null;
-            
+
             try {
                 $this->conn = new PDO("mysql:host=".$this->servername.";dbname=".$this->db_name, $this->username, $this->password);
                 $this->conn->exec("set names utf8");
