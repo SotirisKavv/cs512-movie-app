@@ -41,7 +41,7 @@
             // echo $sql;
 
             $stmt = $this->conn->prepare($sql);
-            // 
+            //
             // echo print_r($this);
 
             $this->name=htmlspecialchars(strip_tags($this->name));
@@ -108,60 +108,60 @@
             $this->confirmed = $dataRow['confirmed'];
         }
 
-        public function updateUser() {
-            $sql = "UPDATE
-                   ". $this->db_table ."
-                    SET
-                    name = :name,
-                    surname = :surname,
-                    username = :username,
-                    password = :password,
-                    email = :email,
-                    role = :role,
-                    confirmed = :confirmed
-                    WHERE
-                    id = :id
-                    ";
-
-            $stmt = $this->conn->prepare($sql);
-
-            $this->name=htmlspecialchars(strip_tags($this->name));
-            $this->surname=htmlspecialchars(strip_tags($this->surname));
-            $this->username=htmlspecialchars(strip_tags($this->username));
-            $this->password=htmlspecialchars(strip_tags($this->password));
-            $this->email=htmlspecialchars(strip_tags($this->email));
-            $this->role=htmlspecialchars(strip_tags($this->role));
-            $this->confirmed=htmlspecialchars(strip_tags($this->confirmed));
-            $this->id=htmlspecialchars(strip_tags($this->id));
-
-            $stmt->bindParam(":name", $this->name);
-            $stmt->bindParam(":surname", $this->surname);
-            $stmt->bindParam(":username", $this->username);
-            $stmt->bindParam(":password", $this->password);
-            $stmt->bindParam(":email", $this->email);
-            $stmt->bindParam(":role", $this->role);
-            $stmt->bindParam(":confirmed", $this->confirmed);
-            $stmt->bindParam(":id", $this->id);
-
-            if($stmt->execute()){
-                return true;
-             }
-             return false;
-        }
-
-        public function deleteUser() {
-            $sql = "DELETE FROM " . $this->db_table . " WHERE id = ?";
-            $stmt = $this->conn->prepare($sql);
-
-            $this->id=htmlspecialchars(strip_tags($this->id));
-
-            $stmt->bindParam(1, $this->id);
-
-            if($stmt->execute()){
-                return true;
-            }
-            return false;
-        }
+        // public function updateUser() {
+        //     $sql = "UPDATE
+        //            ". $this->db_table ."
+        //             SET
+        //             name = :name,
+        //             surname = :surname,
+        //             username = :username,
+        //             password = :password,
+        //             email = :email,
+        //             role = :role,
+        //             confirmed = :confirmed
+        //             WHERE
+        //             id = :id
+        //             ";
+        //
+        //     $stmt = $this->conn->prepare($sql);
+        //
+        //     $this->name=htmlspecialchars(strip_tags($this->name));
+        //     $this->surname=htmlspecialchars(strip_tags($this->surname));
+        //     $this->username=htmlspecialchars(strip_tags($this->username));
+        //     $this->password=htmlspecialchars(strip_tags($this->password));
+        //     $this->email=htmlspecialchars(strip_tags($this->email));
+        //     $this->role=htmlspecialchars(strip_tags($this->role));
+        //     $this->confirmed=htmlspecialchars(strip_tags($this->confirmed));
+        //     $this->id=htmlspecialchars(strip_tags($this->id));
+        //
+        //     $stmt->bindParam(":name", $this->name);
+        //     $stmt->bindParam(":surname", $this->surname);
+        //     $stmt->bindParam(":username", $this->username);
+        //     $stmt->bindParam(":password", $this->password);
+        //     $stmt->bindParam(":email", $this->email);
+        //     $stmt->bindParam(":role", $this->role);
+        //     $stmt->bindParam(":confirmed", $this->confirmed);
+        //     $stmt->bindParam(":id", $this->id);
+        //
+        //     if($stmt->execute()){
+        //         return true;
+        //      }
+        //      return false;
+        // }
+        //
+        // public function deleteUser() {
+        //     $sql = "DELETE FROM " . $this->db_table . " WHERE id = ?";
+        //     $stmt = $this->conn->prepare($sql);
+        //
+        //     $this->id=htmlspecialchars(strip_tags($this->id));
+        //
+        //     $stmt->bindParam(1, $this->id);
+        //
+        //     if($stmt->execute()){
+        //         return true;
+        //     }
+        //     return false;
+        // }
     }
 
 ?>

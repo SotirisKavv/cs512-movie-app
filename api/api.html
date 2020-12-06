@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Movie App RESTful API</title>
+  </head>
+  <body>
+    <h1>Movie App RESTful API</h1>
+    <hr/>
+    <h2>User</h2>
+    <table>
+      <thead>
+        <th>Action</th>
+        <th>Method</th>
+        <th>Endpoint</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Read a User</td>
+          <td>GET</td>
+          <td>api/user/read/${username}</td>
+        </tr>
+        <tr>
+          <td>Read all Users</td>
+          <td>GET</td>
+          <td>api/user/read/</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr/>
+
+    <h2>Cinema</h2>
+    <table>
+      <thead>
+        <th>Action</th>
+        <th>Method</th>
+        <th>Endpoint</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Read a Cinema</td>
+          <td>GET</td>
+          <td>api/cinema/read/${cinemaId}</td>
+        </tr>
+        <tr>
+          <td>Read all Cinemas</td>
+          <td>GET</td>
+          <td>api/cinema/read/</td>
+        </tr>
+        <tr>
+          <td>Create a Cinema</td>
+          <td>POST</td>
+          <td>api/cinema/</td>
+        </tr>
+        <tr>
+          <td>Update a Cinema</td>
+          <td>PUT</td>
+          <td>api/cinema/${cinemaId}</td>
+        </tr>
+        <tr>
+          <td>Delete a Cinema</td>
+          <td>DELETE</td>
+          <td>api/cinema/${cinemaId}</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr/>
+
+    <h2>Movie</h2>
+    <table>
+      <thead>
+        <th>Action</th>
+        <th>Method</th>
+        <th>Endpoint</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Read a Movie</td>
+          <td>GET</td>
+          <td>api/movie/read/${movieId}</td>
+        </tr>
+        <tr>
+          <td>Read all Movies</td>
+          <td>GET</td>
+          <td>api/movie/all/</td>
+        </tr>
+        <tr>
+          <td>Read all Owner's Movies</td>
+          <td>GET</td>
+          <td>api/movie/read/</td>
+        </tr>
+        <tr>
+          <td>Read all User's Favourite Movies</td>
+          <td>GET</td>
+          <td>api/movie/favourites/</td>
+        </tr>
+        <tr>
+          <td>Read all Movies played Today</td>
+          <td>GET</td>
+          <td>api/movie/today/</td>
+        </tr>
+        <tr>
+          <td>Search a Movie</td>
+          <td>GET</td>
+          <td>api/movie/search/${keyword}</td>
+        </tr>
+        <tr>
+          <td>Add a Movie as Fav/ Remove from Favs</td>
+          <td>POST</td>
+          <td>api/movie/favourite/</td>
+        </tr>
+        <tr>
+          <td>Create a Movie</td>
+          <td>POST</td>
+          <td>api/movie/</td>
+        </tr>
+        <tr>
+          <td>Update a Movie</td>
+          <td>PUT</td>
+          <td>api/movie/${movieId}</td>
+        </tr>
+        <tr>
+          <td>Delete a Movie</td>
+          <td>DELETE</td>
+          <td>api/movie/${movieId}</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

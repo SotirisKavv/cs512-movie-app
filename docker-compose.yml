@@ -1,4 +1,4 @@
-version: "2"
+version: "3.5"
 services:
   db:
     container_name: mysqldb
@@ -7,55 +7,63 @@ services:
       args:
         - MYSQL_V=${MYSQL_V}
     restart: always
+    expose:
+      - '3306'
     ports:
-      - "3600:3306"
+      - '3306:3306'
     volumes:
       - data:/var/lib/mysql
     networks:
-      - backend
+      default:
+        ipv4_address: 172.18.1.6
     environment:
+      MYSQL_ROOT_HOST: 172.18.1.5
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
-  webapp:
-    container_name: php
-    build:
-      context: './php/'
-      args:
-        - PHP_V=${PHP_V}
+
+  keyrock:
+    image: fiware/idm
+    container_name: fiware_keyrock
+    hostname: keyrock
     networks:
-      - backend
-    volumes:
-      - ./public/:/var/www/html
-  apache:
-    container_name: apache
-    build:
-      context: './apache/'
-      args:
-        - APACHE_V=${APACHE_V}
-    networks:
-      - backend
-    links:
-      - webapp:webapp
-      - db:db
+      default:
+        ipv4_address: 172.18.1.5
+    depends_on:
+      - db
     ports:
-      - 8000:80
-    volumes:
-      - ./public/:/var/www/html
+      - '3005:3005'
+      - '443:443'
+    environment:
+      - DEBUG=idm:*
+      - IDM_DB_HOST=db
+      - IDM_HOST=https://localhost:3005
+      - IDM_PORT=3005
+      - IDM_DB_PASS=rootpassword
+      - IDM_DB_USER=root
+      - IDM_ADMIN_USER=admin
+      - IDM_ADMIN_EMAIL=admin@test.com
+      - IDM_ADMIN_PASS=nimda
+
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: always
-    links:
-      - db:db
+    depends_on:
+      - db
     ports:
-      - 8080:80
+      - '8000:80'
     networks:
-      - backend
+      default:
+        ipv4_address: 172.18.1.7
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: rootpassword
+
 networks:
-  backend:
+  default:
+    ipam:
+      config:
+        - subnet: 172.18.1.0/24
 volumes:
   data:
