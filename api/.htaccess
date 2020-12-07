@@ -1,15 +1,15 @@
 RewriteEngine On
 Options +FollowSymLinks -MultiViews
 
-RewriteRule cinema/(.*)$ cinema/rest_api.php?cid=$1 [L, QSA]
-RewriteRule cinema cinema/rest_api.php [NC, P]
+RewriteRule cinema/(.*)$ cinema/rest_api.php?cid=$1 [L,QSA]
+RewriteRule cinema cinema/rest_api.php [NC,P]
 
-RewriteRule user/(.*)$ user/rest_api.php?uid=$1 [L, QSA]
-RewriteRule user user/rest_api.php [NC, P]
+RewriteRule user/(.*)$ user/rest_api.php?uid=$1 [L,QSA]
+RewriteRule user user/rest_api.php [NC,P]
 
-RewriteRule movie/search/(.*)$ movie/rest_api.php?s=$1 [L, QSA]
-RewriteRule movie/favourites movie/rest_api.php [NC, P]
-RewriteRule movie/today movie/rest_api.php [NC, P]
-RewriteRule movie/all movie/rest_api.php [NC, P]
-RewriteRule movie/(.*)$ movie/rest_api.php?mid=$1 [L, QSA]
-RewriteRule movie movie/rest_api.php [NC, P]
+RewriteRule movie/search/(.*)$ movie/rest_api.php?s=$1 [L,QSA]
+RewriteRule movie/favourites movie/rest_api.php [NC,P]
+RewriteRule movie/today movie/rest_api.php [NC,P]
+RewriteRule movie/all movie/rest_api.php [NC,P]
+RewriteRule movie/(.*)$ movie/rest_api.php?mid=$1 [L,QSA]
+RewriteRule movie movie/rest_api.php [NC,P]

@@ -1,5 +1,35 @@
 version: "3.5"
 services:
+  webapp:
+    container_name: webapp
+    build:
+      context: './php/'
+      args:
+        - PHP_V=${PHP_V}
+    ports:
+      - '8080:80'
+    depends_on:
+      - api
+    volumes:
+      - ./public/:/var/www/html/
+    networks:
+      default:
+        ipv4_address: 172.18.1.9
+  api:
+    container_name: api
+    build:
+      context: './api/'
+      args:
+        - PHP_V=${PHP_V}
+    volumes:
+      - ./api/:/var/www/html/
+    depends_on:
+      - db
+    ports:
+      - "8090:80"
+    networks:
+      default:
+        ipv4_address: 172.18.1.4
   db:
     container_name: mysqldb
     build:

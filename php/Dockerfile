@@ -1,7 +1,4 @@
 ARG PHP_V=""
-FROM php:${PHP_V:+${PHP_V}-}fpm-alpine
+FROM php:${PHP_V}-apache
 
-RUN apk update; \
-    apk upgrade;
-
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql mysqli

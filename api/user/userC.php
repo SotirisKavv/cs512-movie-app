@@ -52,7 +52,7 @@ class UserController
   function readUsers()
   {
     //get users
-    $stmt = $this->movie->getUsers();
+    $stmt = $this->user->getUsers();
     $itemCount = $stmt->rowCount();
 
     //check if there are more than 0

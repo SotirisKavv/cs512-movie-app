@@ -5,9 +5,9 @@ $db_service = "http://172.18.1.6:3306";
 
 //outh2 vars
 $auth_service = "http://172.18.1.5:3005";
-$auth_basic = "ZmRhNGZmNWQtZmJiOS00ODg5LWI0NTgtYjQyYjRiY2FkZWUyOmIzNmVhZWQ4LTc4YTgtNDliZi04YWVhLTQyMmU2YThiNmZmZA==";
+$auth_basic = "MzgwNjI5NzYtYWFlOC00NjkxLWEyMTEtNjEzOTcyNjAxMjM2OjNhZDYyZDYxLTliMDUtNGY0Zi04YjQ2LTA0MDczMTZiZjhhNw==";
 
-$client_id = "fda4ff5d-fbb9-4889-b458-b42b4bcadee2";
+$client_id = "38062976-aae8-4691-a211-613972601236";
 
 $httpcode = 0;
 
