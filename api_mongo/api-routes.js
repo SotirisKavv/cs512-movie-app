@@ -35,6 +35,9 @@ router.route('/cinemas/owner/:ownerId')
 router.route('/cinemas/movies/owner/:ownerId')
   .get(cinemaController.movies);
 
+router.route('/cinemas/movies')
+  .get(cinemaController.all);
+
 router.route('/cinemas/:id')
   .get(cinemaController.view)
   .put(cinemaController.update)

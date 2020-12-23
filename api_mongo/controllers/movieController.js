@@ -2,6 +2,11 @@ const Movie = require('../models/movieModel');
 const Cinema = require('../models/cinemaModel');
 const mongoose = require('mongoose');
 
+function formatDate(date) {
+  var parts = date.split('-');
+  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+}
+
 //handle index actions
 exports.index = function (req, res) {
   Movie.get((err, movies) => {
@@ -44,7 +49,7 @@ exports.today = function (req, res) {
   Movie.find({
     startDate: { $lte : now.toISOString()},
     endDate: { $gte : now.toISOString()}
-  }, (err, movies) => {
+  }).exec((err, movies) => {
     if (err) {
       res.json({
         status: "error",
@@ -65,7 +70,7 @@ exports.search = function (req, res) {
       {category: {$regex : `.*${req.params.key}.*`, $options: 'i'}},
       {title: {$regex : `.*${req.params.key}.*`, $options: 'i'}},
       {cinemaName: {$regex : `.*${req.params.key}.*`, $options: 'i'}}
-    ]}, (err, movies) => {
+    ]}).populate('cinema').exec((err, movies) => {
     if (err)
       res.send(err);
     res.json({
@@ -84,8 +89,8 @@ exports.new = function (req, res) {
   movie.title = req.body.title;
   movie.releaseYear = req.body.releaseYear;
   movie.posterLink = req.body.posterLink;
-  movie.startDate = req.body.startDate;
-  movie.endDate = req.body.endDate;
+  movie.startDate = new Date(formatDate(req.body.startDate)).toISOString();
+  movie.endDate = new Date(formatDate(req.body.endDate)).toISOString();
   movie.category = req.body.category;
 
   Cinema.findById(req.body.cinemaId, (err, cinema) => {
@@ -105,7 +110,7 @@ exports.new = function (req, res) {
 
 //handle view movie's infos by id
 exports.view = function (req, res) {
-  Movie.findById(req.params.id, (err, movie) => {
+  Movie.findById(req.params.id).populate('cinema').exec((err, movie) => {
     if (err)
       res.send(err);
     res.json({
@@ -122,22 +127,22 @@ exports.update = function (req, res) {
       res.json(err);
     }
 
-    movie.title = req.body.title ? req.body.title : movie.title;
+    movie.title = req.body.title;
     movie.releaseYear = req.body.releaseYear;
     movie.posterLink = req.body.posterLink;
-    movie.startDate = req.body.startDate;
-    movie.endDate = req.body.endDate;
-    movie.cinemaId = req.body.cinemaId;
+    movie.startDate = new Date(formatDate(req.body.startDate)).toISOString();
+    movie.endDate = new Date(formatDate(req.body.endDate)).toISOString();
+    movie.category = req.body.category;
 
-    movie.save((err) => {
-      if (err) {
-        res.json(err);
-      }
-      res.json({
-        message: 'Movie info updated',
-        body: movie
+    Cinema.findById(req.body.cinemaId, (err, cinema) => {
+      movie.cinema = cinema._id;
+      movie.save((error) => {
+        res.json({
+        message: 'Movie Updated!',
+          body: movie
+        });
       });
-    });
+    })
   });
 };
 

@@ -48,6 +48,19 @@ exports.movies = function (req, res) {
   });
 };
 
+//handle find all cinemas with movies
+exports.all = function (req, res) {
+  Cinema.find()
+  .populate('movies')
+  .then((cinemas) => {
+    res.json({
+      status: "success",
+      message: "Cinemas retrieved succesfully",
+      body: cinemas
+    });
+  });
+};
+
 //handle create cinema actions
 exports.new = function (req, res) {
   var cinema = new Cinema();

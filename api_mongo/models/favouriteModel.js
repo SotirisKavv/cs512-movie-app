@@ -2,8 +2,10 @@ const mongoose = require("mongoose");
 
 //set up Schema
 const favouriteSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   movie: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'movie',
     required: true
   },
   userId: {

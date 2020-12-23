@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 //Connect to DB
-const db_url = "mongodb://localhost:27017/movieApp_db";
+const db_url = "mongodb://mongo_data:27017/movieApp_db";
 
 mongoose.connect(db_url, {useNewUrlParser: true}, (err) => {
   err?
