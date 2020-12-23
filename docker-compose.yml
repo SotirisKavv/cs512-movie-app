@@ -9,27 +9,34 @@ services:
     ports:
       - '8080:80'
     depends_on:
-      - api
+      - data_storage
     volumes:
       - ./public/:/var/www/html/
     networks:
       default:
         ipv4_address: 172.18.1.9
-  api:
-    container_name: api
-    build:
-      context: './api/'
-      args:
-        - PHP_V=${PHP_V}
-    volumes:
-      - ./api/:/var/www/html/
-    depends_on:
-      - db
+
+  data_storage:
+    container_name: data_storage
+    restart: always
+    build: ./api_mongo/
     ports:
       - "8090:80"
+    depends_on:
+      - mongo_data
     networks:
       default:
-        ipv4_address: 172.18.1.4
+        ipv4_address: 172.18.1.11
+
+  mongo_data:
+    container_name: mongo_data
+    image: mongo
+    volumes:
+      - ./data2:/data/db
+    networks:
+      default:
+        ipv4_address: 172.18.1.8
+
   db:
     container_name: mysqldb
     build:
@@ -75,6 +82,34 @@ services:
       - IDM_ADMIN_EMAIL=admin@test.com
       - IDM_ADMIN_PASS=nimda
 
+  mongo_proxy:
+    image: fiware/pep-proxy
+    container_name: fiware_pep_proxy_data
+    hostname: mongo_proxy
+    networks:
+      default:
+        ipv4_address: 172.18.1.16
+    depends_on:
+      - keyrock
+    ports:
+      - "8095:8095"
+    expose:
+      - "8095"
+    environment:
+      - PEP_PROXY_APP_HOST=data_storage
+      - PEP_PROXY_APP_PORT=8090
+      - PEP_PROXY_PORT=8095
+      - PEP_PROXY_IDM_HOST=keyrock
+      - PEP_PROXY_HTTPS_ENABLED=false
+      - PEP_PROXY_IDM_SSL_ENABLED=false
+      - PEP_PROXY_IDM_PORT=3005
+      - PEP_PROXY_APP_ID=d9ec7243-8131-4228-8143-b8fd5448a850
+      - PEP_PROXY_USERNAME=pep_proxy_50639bc0-5dc0-472f-aaed-63e5b2154408
+      - PEP_PASSWORD=pep_proxy_e7286178-ca22-440b-ac72-2fd97a019fd6
+      - PEP_PROXY_PDP=idm
+      - PEP_PROXY_MAGIC_KEY=maG!cK3y
+
+
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
@@ -97,3 +132,4 @@ networks:
         - subnet: 172.18.1.0/24
 volumes:
   data:
+  data2:

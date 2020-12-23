@@ -10,6 +10,7 @@
           $role = 'Admin';
           break;
         default:
+          $role = $_SESSION['role'];
           break;
     }
 ?>
@@ -30,21 +31,18 @@
             <li class="nav-item <?=($_SERVER['PHP_SELF']=='/owner.php')? "active":""?>">
                 <a class="nav-link" href="./owner.php">Cinemas</a>
             </li>
-            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/admin.php')? "active":""?>">
+            <!-- <li class="nav-item <?=($_SERVER['PHP_SELF']=='/admin.php')? "active":""?>">
                 <a class="nav-link" href="./admin.php">Admninistration</a>
-            </li>
-            <li class="nav-item">
-              <a class="dropdown-item" href="php/logoutAction.php">Logout</a>
-            </li>
+            </li> -->
         </ul>
-        <!-- <div class="nav-item white-text dropdown" style="float: right !important;">
+        <div class="nav-item white-text dropdown" style="float: right !important;">
             <a class="nav-link user dropdown-toggle" target="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?=$_SESSION['name']." ".$_SESSION['lname']." (".$role.")"?>
+                <?=$_SESSION['username']." (".$role.")"?>
             </a>
             <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdown" >
                 <a class="dropdown-item" href="php/logoutAction.php">Logout</a>
             </div>
-        </div> -->
+        </div>
     </div>
 </nav>

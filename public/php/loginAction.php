@@ -1,51 +1,100 @@
 <?php
-  if (isset($_POST['login-submit'])) {
+  //include api call function
+  include_once 'callApi.php';
 
-    include_once '../config/database.php';
-    include_once '../user/user.php';
+  $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $parts = parse_url($url);
+  parse_str($parts['query'], $query);
 
-    $database = new Database();
-    $db = $database->getConnection();
+  //if log-in through form
+  if (isset($_POST['login-submit']) && !isset($_SESSION)) {
 
-    $user = new User($db);
-    
-    $username = $_POST['uname'];
-    $password = $_POST['pwd'];
+    // setting the header
+    $header = array("Host: idm",
+                    "Authorization: Basic ".$auth_basic,
+                    "Content-Type: application/x-www-form-urlencoded");
 
-    if (empty($username) || empty($password)) {
-      header("Location: ../index.php?error=emptyfields");
-      exit();
+    // setting the data to aquire access token
+    $data = "grant_type=password&username=".$_POST['uname']
+            ."&password=".$_POST['pwd'];
+
+    // call keyrock API
+    $response = callAPI("POST", $auth_service.'/oauth2/token', $data, $header);
+    $response = json_decode($response, true); //associative array
+
+    //if response contains 'access_token', user has been verified
+    if ($response['access_token']) {
+      session_start();
+
+      // setting session variables useful to connect with proxy
+      $_SESSION["type"] = "oauth2";
+      $_SESSION["access_token"] = $response['access_token'];
+      $_SESSION["refresh_token"] = $response['refresh_token'];
+      $_SESSION["token_type"] = $response['token_type'];
+      $_SESSION["loggedin"] = true;
+
+      // get user's info
+      $response = callAPI('GET', $auth_service.'/user?access_token='.$_SESSION['access_token'], false, false);
+      $response = json_decode($response, true); //associative array
+
+      // storing user's info into session variables
+      $_SESSION["username"] = $response['username'];
+      $_SESSION["username"] = $response['username'];
+      $_SESSION["role"] = $response['roles'][0]['name'];
+      $_SESSION["id"] = $response['id'];
+
+      header("location: ../welcome.php");
+
     } else {
-      $user->username = isset($_POST['uname'])? $_POST['uname']:die();
-      $stmt = $user->getUserByUsrname();
-
-      if ($user->id != null) {
-        $verifiedPwd = password_verify($password, $user->password);
-
-        if ($verifiedPwd == false) {
-          header("Location: ../index.php?error=wrongpwd");
-          exit();
-
-        } else {
-          if ($user->confirmed > 0) {
-            session_start();
-            $_SESSION['uid'] = $user->id;
-            $_SESSION['name'] = $user->name;
-            $_SESSION['lname'] = $user->surname;
-            $_SESSION['role'] = $user->role;
-            $_SESSION['conf'] = $user->confirmed;
-
-            header("Location: ../welcome.php");
-            exit();
-          } else {
-            header("Location: ../index.php?error=noconfirm");
-            exit();
-          }
-        }
-      } else {
-        header("Location: ../index.php?error=nouser");
-        exit();
-      }
+      header("location: ../index.php");
+      exit;
     }
+    // if log in through connect with keyrock
+  } elseif ($query['code'] && !isset($_SESSION)) {
+
+    // setting the header
+    $header = array("Host: idm",
+                    "Authorization: Basic ".$auth_basic,
+                    "Content-Type: application/x-www-form-urlencoded");
+
+    // setting the data to aquire access token
+    $data = "grant_type=authorization_code&code=".$query['code']."&redirect_uri=http://localhost:8080/php/loginAction.php";
+
+    // call keyrock API
+    $response = callAPI("POST", $auth_service.'/oauth2/token', $data, $header);
+    $response = json_decode($response, true); //associative array
+
+    //if response contains 'access_token', user has been verified
+    if ($response['access_token']) {
+      session_start();
+
+      // setting session variables useful to connect with proxy
+      $_SESSION["type"] = "oauth2";
+      $_SESSION["access_token"] = $response['access_token'];
+      $_SESSION["refresh_token"] = $response['refresh_token'];
+      $_SESSION["token_type"] = $response['token_type'];
+      $_SESSION["loggedin"] = true;
+
+      // get user's info
+      $response = callAPI('GET', $auth_service.'/user?access_token='.$_SESSION['access_token'], false, false);
+      $response = json_decode($response, true); //associative array
+
+      // storing user's info into session variables
+      $_SESSION["username"] = $response['username'];
+      $_SESSION["username"] = $response['username'];
+      $_SESSION["role"] = $response['roles'][0]['name'];
+      $_SESSION["id"] = $response['id'];
+
+      header("location: ../welcome.php");
+
+    } else {
+      header("location: ../index.php");
+      exit;
+    }
+
+    //if not logged in, redircet to index
+  } elseif (!isset($_SESSION["loggedin"]) || isset($_SESSION["loggedin"]) !== true) {
+      header("location: index.php");
+      exit;
   }
  ?>

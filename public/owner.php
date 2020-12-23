@@ -1,4 +1,4 @@
-<?php 
+<?php
     session_start();
 
     if (!isset($_SESSION['role'])) {
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/b9ef111606.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="css/owner.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -26,7 +26,7 @@
     <title>Cinema</title>
 </head>
 <body>
-  <?php 
+  <?php
     require "components/navbar.php";
     require_once "php/errorNav.php";
   ?>
@@ -83,7 +83,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <form method="post" id="cinema_form">
-          <div class="modal-header">						
+          <div class="modal-header">
             <h4 class="modal-title"></h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           </div>
@@ -94,7 +94,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <input type="hidden" id="id_u_cinema" name="id_u" class="form-control" required>					
+            <input type="hidden" id="id_u_cinema" name="id_u" class="form-control" required>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <input type="submit" id="button_action_cinema" class="btn btn-info">
           </div>
@@ -107,13 +107,13 @@
   <div id="deleteCinemaModal" class="modal fade" style="opacity: 1;">
     <div class="modal-dialog modal-dialog-centered danger">
       <div class="modal-content">
-        <form method="post" id="deleteCinemaForm">					
-          <div class="modal-header">						
+        <form method="post" id="deleteCinemaForm">
+          <div class="modal-header">
             <h4 class="modal-title">Delete Cinema</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
             <div class="modal-body">
-            <input type="hidden" id="id_d_cinema" name="id_d" class="form-control">					
+            <input type="hidden" id="id_d_cinema" name="id_d" class="form-control">
             <p>Are you sure you want to delete these Records?</p>
             <p class="text-warning"><small>This action cannot be undone.</small></p>
           </div>
@@ -131,7 +131,7 @@
     <div class="modal-dialog modal-dialog-centered" style="height: 100vh;">
       <div class="modal-content">
         <form method="post" id="movie_form">
-          <div class="modal-header">						
+          <div class="modal-header">
             <h4 class="modal-title"></h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           </div>
@@ -142,23 +142,23 @@
             </div>
             <div class="form-group">
               <label>Release Year</label>
-              <input type="text" id="year" name="year" class="form-control" required>
+              <input type="text" id="year" name="releaseYear" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Poster Link</label>
-              <input type="text" id="poster_link" name="poster_link" class="form-control">
+              <input type="text" id="poster_link" name="posterLink" class="form-control">
             </div>
             <div class="form-group">
               <label>Start Date</label>
-              <input type="text" id="start_date" name="start_date" class="form-control" required>
+              <input type="text" id="start_date" name="startDate" class="form-control" required>
             </div>
             <div class="form-group">
               <label>End Date</label>
-              <input type="text" id="end_date" name="end_date" class="form-control" required>
+              <input type="text" id="end_date" name="endDate" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Cinema Name</label>
-              <select id="cinema_id" name="cinema_id" class="form-control" required>
+              <select id="cinema_id" name="cinemaId" class="form-control" required>
               </select>
             </div>
             <div class="form-group">
@@ -167,7 +167,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <input type="hidden" id="id_u_movie" name="id_u" class="form-control" required>					
+            <input type="hidden" id="id_u_movie" name="id_u" class="form-control" required>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <input type="submit" id="button_action_movie" class="btn btn-info">
           </div>
@@ -180,13 +180,13 @@
   <div id="deleteMovieModal" class="modal fade" style="opacity: 1;">
     <div class="modal-dialog modal-dialog-centered danger">
       <div class="modal-content">
-        <form method="post" id="deleteMovieForm">					
-          <div class="modal-header">						
+        <form method="post" id="deleteMovieForm">
+          <div class="modal-header">
             <h4 class="modal-title">Delete Movie</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           </div>
             <div class="modal-body">
-            <input type="hidden" id="id_d_movie" name="id_d" class="form-control">					
+            <input type="hidden" id="id_d_movie" name="id_d" class="form-control">
             <p>Are you sure you want to delete these Records?</p>
             <p class="text-warning"><small>This action cannot be undone.</small></p>
           </div>

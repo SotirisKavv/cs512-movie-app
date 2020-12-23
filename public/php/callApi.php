@@ -1,13 +1,13 @@
 <?php
 
 //REST API vars
-$db_service = "http://172.18.1.6:3306";
+$api_service = "http://localhost:8095";
 
 //outh2 vars
 $auth_service = "http://172.18.1.5:3005";
-$auth_basic = "MzgwNjI5NzYtYWFlOC00NjkxLWEyMTEtNjEzOTcyNjAxMjM2OjNhZDYyZDYxLTliMDUtNGY0Zi04YjQ2LTA0MDczMTZiZjhhNw==";
+$auth_basic = "ZDllYzcyNDMtODEzMS00MjI4LTgxNDMtYjhmZDU0NDhhODUwOjM2Y2JhYmRlLWQ3MzgtNDVmNy1iODc0LWYxNGMwMDRhNjVhOA==";
 
-$client_id = "38062976-aae8-4691-a211-613972601236";
+$client_id = "d9ec7243-8131-4228-8143-b8fd5448a850";
 
 $httpcode = 0;
 

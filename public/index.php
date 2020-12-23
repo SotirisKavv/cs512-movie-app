@@ -26,7 +26,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
         <title>Movie App</title>
     </head>
     <body>
-
         <div class="container">
             <form class="box" action="php/loginAction.php" method="post">
                 <h1>Log In</h1>
@@ -42,7 +41,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                 <h1>OR</h1>
                 <div class="area">
                   <button type="button" class="oauth"
-                    onclick="location.href='http://172.18.1.5:3005/oauth2/authorize?response_type=token&client_id=38062976-aae8-4691-a211-613972601236&state=xyz&redirect_uri=http://localhost:8080/welcome.php'">
+                    onclick="location.href='http://172.18.1.5:3005/oauth2/authorize?response_type=code&client_id=d9ec7243-8131-4228-8143-b8fd5448a850&state=xyz&redirect_uri=http://localhost:8080/php/loginAction.php'">
                     Connect with Keyrock
                   </button>
                 </div>
