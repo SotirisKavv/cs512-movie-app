@@ -1,9 +1,9 @@
 <?php
   session_start();
 
-  // if (!isset($_SESSION['role']) || $_SESSION['conf']==0) {
-  //   header("Location: ./index.php");
-  // }
+  if (!isset($_SESSION['role']) || !$_SESSION['loggedin']) {
+    header("Location: index.php");
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">

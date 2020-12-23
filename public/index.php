@@ -45,9 +45,9 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                     Connect with Keyrock
                   </button>
                 </div>
-                <p>
+                <!-- <p>
                     Δεν έχεις λογαριασμό; Μπες <a href="signup.php">εδώ</a> και κάνε την εγγραφή σου τώρα!
-                </p>
+                </p> -->
             </form>
         </div>
         <?php require "components/footer.php";?>

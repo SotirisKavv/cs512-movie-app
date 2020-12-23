@@ -8,7 +8,7 @@ const formatDate = (date) => {
 
 const fetch_todays = () => {
   $.ajax({
-    url:"http://localhost:8095/api/movies/today",
+    url:"http://172.18.1.16:8095/api/movies/today",
     headers: {"X-Auth-Token": "maG!cK3y"},
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',
     dataType: 'json',
@@ -18,15 +18,15 @@ const fetch_todays = () => {
         if (data.status === 'error') {
           return `<p>${data.message}</p>`;
         } else {
-          console.log();
+          console.log(data.body);
           return data.body.map((movie) => (
               ` <div class="card-wrapper card-action mb-4 mx-3">
                   <div id="card-1" class="card card-rotating text-center h-100">
                     <div class="face front">
                       <div class="card-up">
                         ${(movie.posterLink) ?
-                          (`<img class="card-img-top" src="${movie.posterLink}" alt="${movie.title}">`) :
-                          (`<img class="card-img-top" src="images/null-img.png" alt="${movie.title}">`)
+                          (`<img class="card-img-top" src="${movie.posterLink}" alt="${movie.title}" style="height: 300px;">`) :
+                          (`<img class="card-img-top" src="images/null-img.png" alt="${movie.title}" style="height: 300px;">`)
                         }
                       </div>
                       <div class="card-body">
@@ -53,9 +53,8 @@ $(document).ready(() => {
 $(document).on('click', '.todays', function() {
   var id = $(this).attr('id');
   id = id.substring(0, id.length-2);
-  console.log("http://localhost:8095/api/movies/"+id);
   $.ajax({
-    url:"http://localhost:8095/api/movies/"+id,
+    url:"http://172.18.1.16:8095/api/movies/"+id,
     headers: {"X-Auth-Token": "maG!cK3y"},
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',
     dataType: 'json',
@@ -65,7 +64,7 @@ $(document).on('click', '.todays', function() {
       $('#image').attr('src', (movie.posterLink)?movie.posterLink:"images/null-img.png");
       $('#image').attr('alt', movie.title);
       $('#title').html(`<b>${movie.title}</b> ${movie.releaseYear}`);
-      $('#cinema_name').html(`<b>In</b> ${movie.cinemaName}`);
+      $('#cinema_name').html(`<b>In</b> ${movie.cinema.name}`);
       $('#dates').html(`<b>From</b> ${formatDate(movie.startDate.substring(0, 10))}<br/>
                         <b>Until</b> ${formatDate(movie.endDate.substring(0, 10))}`);
       $('#category').html(`<b>Category</b> ${movie.category}`);

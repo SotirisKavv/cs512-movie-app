@@ -1,7 +1,23 @@
 const formatDate = (date) => {
-    datep = date.split('-');
-    return `${datep[2]} / ${datep[1]} / ${datep[0]}`
+    datep = date.substring(0,10).split('-');
+    return `${datep[2]}-${datep[1]}-${datep[0]}`
 }
+
+const getFormData = (data) => {
+        var o = {};
+        var a = data.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 
 const fetch_cinemas = () => {
   $.ajaxSetup({cache: false});
@@ -9,7 +25,7 @@ const fetch_cinemas = () => {
     var session = JSON.parse(data);
     // console.log(session.id);
     $.ajax({
-      url:`http://localhost:8095/api/cinemas/owner/${session.id}`,
+      url:`http://172.18.1.16:8095/api/cinemas/owner/${session.id}`,
       headers: {"X-Auth-Token": "maG!cK3y"},
       contentType: 'application/x-www-form-urlencoded; charset=utf-8',
       dataType: 'json',
@@ -55,30 +71,27 @@ const fetch_movies = () => {
     var session = JSON.parse(data);
     // console.log(session);
     $.ajax({
-      url:`http://localhost:8095/api/cinemas/movies/owner/${session.id}`,
+      url:`http://172.18.1.16:8095/api/cinemas/movies/owner/${session.id}`,
       headers: {"X-Auth-Token": "maG!cK3y"},
       contentType: 'application/x-www-form-urlencoded; charset=utf-8',
       dataType: 'json',
       type: 'GET'
     }).then(data => {
-        // console.log(data);
+        console.log(data);
         if (data.body.length == 0) {
           $('.owner_movies').html(() => {
             return `<p>No Records were found</p>`;
           });
         } else {
           $('.owner_movies').html(() => {
-            data.body.map((cinema) => {
-              if (cinema.movies.length > 0 ) {
-                cinema.movies.map((movie) => {
-                  console.log(movie);
-                    return (
+            return data.body.map((cinema) => {
+                var movies = cinema.movies.map((movie) => (
                      `<div class="card mb-3">
                         <div class="row no-gutters">
                           <div class="col-md-4">
                             ${(movie.posterLink)?
-                              (`<img src="${movie.posterLink}" alt="${movie.title} Poster"/>`):
-                              (`<img src="images/null-img.png" alt="${movie.title} Poster">`)
+                              (`<img src="${movie.posterLink}" alt="${movie.title} Poster" style="height: 300px;"/>`):
+                              (`<img src="images/null-img.png" alt="${movie.title} Poster" style="height: 300px;">`)
                             }
                           </div>
                           <div class="col-md-8">
@@ -107,14 +120,14 @@ const fetch_movies = () => {
                               </div>
                             </div>
                           </div>
-                      </div>`);
-                    })
+                      </div>`
+                    ));
+                    return movies.join("");
                   }
-                })
-              })
-          }}
-    )})
-  };
+                )})
+              }
+          })}
+    )};
 
 
 $(document).ready(() => {
@@ -132,7 +145,7 @@ $(document).ready(() => {
       // console.log(session, session.id);
       if (form_data.indexOf('id_u=&') > -1){
         $.ajax({
-          url:"http://localhost:8095/api/cinemas",
+          url:"http://172.18.1.16:8095/api/cinemas",
           headers: {"X-Auth-Token": "maG!cK3y"},
           contentType: 'application/x-www-form-urlencoded; charset=utf-8',
           dataType: 'json',
@@ -146,7 +159,7 @@ $(document).ready(() => {
       } else {
         var index = form_data.indexOf('id_u=');
         $.ajax({
-          url:`http://localhost:8095/api/cinemas/${form_data.substring(index+5, index+29)}`,
+          url:`http://172.18.1.16:8095/api/cinemas/${form_data.substring(index+5, index+29)}`,
           headers: {"X-Auth-Token": "maG!cK3y"},
           contentType: 'application/x-www-form-urlencoded; charset=utf-8',
           dataType: 'json',
@@ -166,7 +179,7 @@ $(document).ready(() => {
     var form_data = $("#deleteCinemaForm").serialize();
     var index = form_data.indexOf('id_d=');
     $.ajax({
-      url:`http://localhost:8095/api/cinemas/${form_data.substring(index+5, index+29)}`,
+      url:`http://172.18.1.16:8095/api/cinemas/${form_data.substring(index+5, index+29)}`,
       headers: {"X-Auth-Token": "maG!cK3y"},
       contentType: 'application/x-www-form-urlencoded; charset=utf-8',
       dataType: 'json',
@@ -181,25 +194,53 @@ $(document).ready(() => {
   $("#movie_form").submit((e)=>{
     e.preventDefault();
     var form_data = $("#movie_form").serialize();
-    console.log(form_data);
-    // console.log(form_data.substring(form_data.length -1));
+    // var form_json = getFormData($("#movie_form"));
+    // var entity = {
+    //   "id": "",
+    //   "type": "Movie",
+    //   "startDate": {
+    //     "value": "",
+    //     "type": "Date"
+    //   },
+    //   "endDate": {
+    //     "value": "",
+    //     "type": "Date"
+    //   }
+    // }
     if (form_data.substring(form_data.length -1) === '='){
       $.ajax({
-        url:"http://localhost:8095/api/movies",
+        url:"http://172.18.1.16:8095/api/movies",
         headers: {"X-Auth-Token": "maG!cK3y"},
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         dataType: 'json',
         data: form_data,
         type: 'POST',
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         fetch_movies();
         $('#movieModal').modal('hide');
+        // var movie = res.body;
+        //
+        // entity.id = movie._id;
+        // entity.startDate.value = movie.startDate;
+        // entity.endDate.value = movie.endDate;
+        //
+        // console.log(entity);
+        //
+        // $.ajax({
+        //   url:"http://172.18.1.13:1026/v2/entities?options=keyValues",
+        //   // headers: {"X-Auth-Token": "maG!cK3y"},
+        //   contentType: 'application/json',
+        //   dataType: 'json',
+        //   data: entity,
+        //   type: 'POST',
+        // })
       })
+
     } else {
       var index = form_data.indexOf('id_u=');
       $.ajax({
-        url:`http://localhost:8095/api/movies/${form_data.substring(index+5)}`,
+        url:`http://172.18.1.16:8095/api/movies/${form_data.substr(index+5)}`,
         headers: {"X-Auth-Token": "maG!cK3y"},
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         dataType: 'json',
@@ -216,10 +257,13 @@ $(document).ready(() => {
   $("#deleteMovieForm").submit((e)=>{
     e.preventDefault();
     var form_data = $("#deleteMovieForm").serialize();
+    var index = form_data.indexOf('id_d=');
     $.ajax({
-      url: "movie/delete.php",
-      data: form_data,
-      method: "post",
+      url:`http://172.18.1.16:8095/api/movies/${form_data.substring(index+5, index+29)}`,
+      method: "DELETE",
+      dataType: "json",
+      headers: {"X-Auth-Token": "maG!cK3y"},
+      contentType: 'application/x-www-form-urlencoded; charset=utf-8',
       success: (data) => {
         fetch_movies();
         $('#deleteMovieModal').modal('hide');
@@ -245,7 +289,7 @@ $(document).on('click', '.edit_cinema', function() {
   var id = $(this).attr('id');
   id = id.substring(0, id.length-2);
   $.ajax({
-    url:`http://localhost:8095/api/cinemas/${id}`,
+    url:`http://172.18.1.16:8095/api/cinemas/${id}`,
     headers: {"X-Auth-Token": "maG!cK3y"},
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',
     dataType: 'json',
@@ -264,7 +308,7 @@ $(document).on('click', '.delete_cinema', function() {
   var id = $(this).attr('id');
   id = id.substring(0, id.length-2);
   $.ajax({
-    url:`http://localhost:8095/api/cinemas/${id}`,
+    url:`http://172.18.1.16:8095/api/cinemas/${id}`,
     headers: {"X-Auth-Token": "maG!cK3y"},
     contentType: 'application/x-www-form-urlencoded; charset=utf-8',
     dataType: 'json',
@@ -282,7 +326,7 @@ $(document).on('click', '.create_movie', function() {
   $.get('../php/getSession.php', function(data) {
     var session = JSON.parse(data);
     $.ajax({
-      url:`http://localhost:8095/api/cinemas/owner/${session.id}`,
+      url:`http://172.18.1.16:8095/api/cinemas/owner/${session.id}`,
       headers: {"X-Auth-Token": "maG!cK3y"},
       contentType: 'application/x-www-form-urlencoded; charset=utf-8',
       dataType: 'json',
@@ -312,48 +356,58 @@ $(document).on('click', '.edit_movie', function() {
   var id = $(this).attr('id');
   id = id.substring(0, id.length-2);
   $.ajax({
-    url:"movie/single_read.php",
-    method: "post",
-    data: {"id":id},
+    url:`http://172.18.1.16:8095/api/movies/${id}`,
+    method: "GET",
     dataType: "json",
-    success: (movie) => {
+    headers: {"X-Auth-Token": "maG!cK3y"},
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+  }).then(res => {
+    $.ajaxSetup({cache: false});
+    $.get('../php/getSession.php', function(data) {
+      var session = JSON.parse(data);
       $.ajax({
-        url: "cinema/read_owner.php",
-        success: (data) => {
-          $('select').html(()=>{
-            if (!data.message) {
-              return data.body.map((cinema)=>(
-                `<option value="${cinema.id}">${cinema.name}</option>`
-              ));
-            }
-          });
-          $('#id_u_movie').val(movie.id);
-          $('#title').val(movie.title);
-          $('#poster_link').val(movie.poster_link);
-          $('#year').val(movie.release_year);
-          $('#start_date').val(formatDate(movie.start_date));
-          $('#end_date').val(formatDate(movie.end_date));
-          $(`#cinema_name option[value=${movie.cinema_id}]`).attr('selected', true);
-          $('#category').val(movie.category);
-          $('.modal-title').text('Edit Movie');
-          $('#button_action_movie').val('Update');
-          $('#movieModal').modal('show');
-        }
-      });
-    }
-  });
+        url:`http://172.18.1.16:8095/api/cinemas/owner/${session.id}`,
+        headers: {"X-Auth-Token": "maG!cK3y"},
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        dataType: 'json',
+        type: 'GET',
+      }).then((data) => {
+        var cinemas = data.body;
+        console.log(cinemas);
+        $('select').html(()=>{
+          return cinemas.map((cinema)=>(
+            `<option value="${cinema._id}">${cinema.name}</option>`
+          ))
+        });
+        var movie = res.body;
+        $('#id_u_movie').val(movie._id);
+        $('#title').val(movie.title);
+        $('#poster_link').val(movie.posterLink);
+        $('#year').val(movie.releaseYear);
+        $('#start_date').val(formatDate(movie.startDate));
+        $('#end_date').val(formatDate(movie.endDate));
+        $(`#cinema_name option[value="${movie.cinema.name}"]`).attr('selected', true);
+        $('#category').val(movie.category);
+        $('.modal-title').text('Edit Movie');
+        $('#button_action_movie').val('Update');
+        $('#movieModal').modal('show');
+      }
+    )});
+  })
 });
 
 $(document).on('click', '.delete_movie', function() {
   var id = $(this).attr('id');
   id = id.substring(0, id.length-2);
   $.ajax({
-    url: "movie/single_read.php",
-    method: "post",
-    data: {"id":id},
+    url:`http://172.18.1.16:8095/api/movies/${id}`,
+    method: "GET",
     dataType: "json",
+    headers: {"X-Auth-Token": "maG!cK3y"},
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
     success: (data) => {
-      $('#id_d_movie').val(data.id);
+      var movie = data.body;
+      $('#id_d_movie').val(movie._id);
       $('#deleteMovieModal').modal('show');
     }
   });

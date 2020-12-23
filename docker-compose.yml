@@ -54,7 +54,7 @@ services:
       default:
         ipv4_address: 172.18.1.6
     environment:
-      MYSQL_ROOT_HOST: 172.18.1.5
+      MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
@@ -109,6 +109,25 @@ services:
       - PEP_PROXY_PDP=idm
       - PEP_PROXY_MAGIC_KEY=maG!cK3y
 
+  mongo_orion:
+    container_name: mongo_orion
+    image: mongo:3.6
+    command: --nojournal
+    networks:
+     default:
+       ipv4_address: 172.18.1.12
+
+  orion:
+    container_name: fiware_orion
+    image: fiware/orion
+    depends_on:
+     - mongo_orion
+    ports:
+     - "1026:1026"
+    networks:
+      default:
+        ipv4_address: 172.18.1.13
+    command: -dbhost mongo_orion
 
   phpmyadmin:
     container_name: phpmyadmin
