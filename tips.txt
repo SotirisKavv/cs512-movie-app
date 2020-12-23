@@ -1,0 +1,9 @@
+When "xxx.xxx.xxx.xxx host is not allowed to connect to MySQL Server", do this:
+--> Connect to mysql from bash
+--> Check  SELECT host FROM mysql.user;
+--> If you don't see the IP from above, enter the following cmds:
+    . GRANT ALL ON db_name.* to 'db_username'@'xxx.xxx.xxx.%' IDENTIFIED BY 'db_rootpassword'
+    . FLUSH PRIVILEGES;
+    . SELECT host FROM mysql.user;
+--> You 'll be fine ;)
+--> Otherwise, pray

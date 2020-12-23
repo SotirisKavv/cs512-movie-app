@@ -1,5 +1,42 @@
-version: "2"
+version: "3.5"
 services:
+  webapp:
+    container_name: webapp
+    build:
+      context: './php/'
+      args:
+        - PHP_V=${PHP_V}
+    ports:
+      - '8080:80'
+    depends_on:
+      - data_storage
+    volumes:
+      - ./public/:/var/www/html/
+    networks:
+      default:
+        ipv4_address: 172.18.1.9
+
+  data_storage:
+    container_name: data_storage
+    restart: always
+    build: ./api_mongo/
+    ports:
+      - "8090:80"
+    depends_on:
+      - mongo_data
+    networks:
+      default:
+        ipv4_address: 172.18.1.11
+
+  mongo_data:
+    container_name: mongo_data
+    image: mongo
+    volumes:
+      - ./data2:/data/db
+    networks:
+      default:
+        ipv4_address: 172.18.1.8
+
   db:
     container_name: mysqldb
     build:
@@ -7,55 +44,92 @@ services:
       args:
         - MYSQL_V=${MYSQL_V}
     restart: always
+    expose:
+      - '3306'
     ports:
-      - "3600:3306"
+      - '3306:3306'
     volumes:
       - data:/var/lib/mysql
     networks:
-      - backend
+      default:
+        ipv4_address: 172.18.1.6
     environment:
+      MYSQL_ROOT_HOST: 172.18.1.5
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
-  webapp:
-    container_name: php
-    build:
-      context: './php/'
-      args:
-        - PHP_V=${PHP_V}
+
+  keyrock:
+    image: fiware/idm
+    container_name: fiware_keyrock
+    hostname: keyrock
     networks:
-      - backend
-    volumes:
-      - ./public/:/var/www/html
-  apache:
-    container_name: apache
-    build:
-      context: './apache/'
-      args:
-        - APACHE_V=${APACHE_V}
-    networks:
-      - backend
-    links:
-      - webapp:webapp
-      - db:db
+      default:
+        ipv4_address: 172.18.1.5
+    depends_on:
+      - db
     ports:
-      - 8000:80
-    volumes:
-      - ./public/:/var/www/html
+      - '3005:3005'
+      - '443:443'
+    environment:
+      - DEBUG=idm:*
+      - IDM_DB_HOST=db
+      - IDM_HOST=https://localhost:3005
+      - IDM_PORT=3005
+      - IDM_DB_PASS=rootpassword
+      - IDM_DB_USER=root
+      - IDM_ADMIN_USER=admin
+      - IDM_ADMIN_EMAIL=admin@test.com
+      - IDM_ADMIN_PASS=nimda
+
+  mongo_proxy:
+    image: fiware/pep-proxy
+    container_name: fiware_pep_proxy_data
+    hostname: mongo_proxy
+    networks:
+      default:
+        ipv4_address: 172.18.1.16
+    depends_on:
+      - keyrock
+    ports:
+      - "8095:8095"
+    expose:
+      - "8095"
+    environment:
+      - PEP_PROXY_APP_HOST=data_storage
+      - PEP_PROXY_APP_PORT=8090
+      - PEP_PROXY_PORT=8095
+      - PEP_PROXY_IDM_HOST=keyrock
+      - PEP_PROXY_HTTPS_ENABLED=false
+      - PEP_PROXY_IDM_SSL_ENABLED=false
+      - PEP_PROXY_IDM_PORT=3005
+      - PEP_PROXY_APP_ID=d9ec7243-8131-4228-8143-b8fd5448a850
+      - PEP_PROXY_USERNAME=pep_proxy_50639bc0-5dc0-472f-aaed-63e5b2154408
+      - PEP_PASSWORD=pep_proxy_e7286178-ca22-440b-ac72-2fd97a019fd6
+      - PEP_PROXY_PDP=idm
+      - PEP_PROXY_MAGIC_KEY=maG!cK3y
+
+
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: always
-    links:
-      - db:db
+    depends_on:
+      - db
     ports:
-      - 8080:80
+      - '8000:80'
     networks:
-      - backend
+      default:
+        ipv4_address: 172.18.1.7
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: rootpassword
+
 networks:
-  backend:
+  default:
+    ipam:
+      config:
+        - subnet: 172.18.1.0/24
 volumes:
   data:
+  data2:

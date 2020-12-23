@@ -1,4 +1,18 @@
-<?php session_start(); ?>
+<?php
+
+//session init
+if (!isset($_SESSION)) {
+  session_start();
+}
+
+include_once "php/errorLogin.php";
+
+//if logged in, redirect to home page
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+  header("Location: welcome.php");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,22 +26,27 @@
         <title>Movie App</title>
     </head>
     <body>
-        <?php include_once "./php/initializeDB.php"; ?>
-        <?php require "./php/errorLogin.php"; ?>
         <div class="container">
-            <form class="box" action="./php/loginAction.php" method="post">
-                <h1>Σύνδεση</h1>
+            <form class="box" action="php/loginAction.php" method="post">
+                <h1>Log In</h1>
                 <div class="area">
-                    <i class="fa fa-user"></i>
-                    <input autocomplete="off" type="text" name="uname" placeholder="Username">
+                  <i class="fa fa-user"></i>
+                  <input autocomplete="off" type="text" name="uname" placeholder="Email">
                 </div>
                 <div class="area">
-                    <i class="fa fa-lock"></i>
-                    <input autocomplete="off" type="password" name="pwd" placeholder="Κωδικός">
+                  <i class="fa fa-lock"></i>
+                  <input autocomplete="off" type="password" name="pwd" placeholder="Password">
                 </div>
-                <input type="submit" name="login-submit" value="Συνδέσου">
+                <input type="submit" name="login-submit" value="Log In">
+                <h1>OR</h1>
+                <div class="area">
+                  <button type="button" class="oauth"
+                    onclick="location.href='http://172.18.1.5:3005/oauth2/authorize?response_type=code&client_id=d9ec7243-8131-4228-8143-b8fd5448a850&state=xyz&redirect_uri=http://localhost:8080/php/loginAction.php'">
+                    Connect with Keyrock
+                  </button>
+                </div>
                 <p>
-                    Δεν έχεις λογαριασμό; Μπες <a href="./signup.php">εδώ</a> και κάνε την εγγραφή σου τώρα!
+                    Δεν έχεις λογαριασμό; Μπες <a href="signup.php">εδώ</a> και κάνε την εγγραφή σου τώρα!
                 </p>
             </form>
         </div>

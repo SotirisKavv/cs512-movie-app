@@ -1,14 +1,17 @@
-<?php 
+<?php
     switch($_SESSION['role']){
         case 'USER':
-            $role = 'User';
-            break;
+          $role = 'User';
+          break;
         case 'CINEMAOWNER':
-            $role = 'Cinema Owner';
-            break;
+          $role = 'Cinema Owner';
+          break;
         case 'ADMIN':
-            $role = 'Admin';
-            break;
+          $role = 'Admin';
+          break;
+        default:
+          $role = $_SESSION['role'];
+          break;
     }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark indigo py-4">
@@ -19,26 +22,26 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/movieApp/welcome.php')? "active":""?>">
+            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/welcome.php')? "active":""?>">
                 <a class="nav-link" href="./welcome.php">Home</a>
             </li>
-            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/movieApp/movies.php')? "active":""?>">
+            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/movies.php')? "active":""?>">
                 <a class="nav-link" href="./movies.php">Movies</a>
             </li>
-            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/movieApp/owner.php')? "active":""?>">
+            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/owner.php')? "active":""?>">
                 <a class="nav-link" href="./owner.php">Cinemas</a>
             </li>
-            <li class="nav-item <?=($_SERVER['PHP_SELF']=='/movieApp/admin.php')? "active":""?>">
+            <!-- <li class="nav-item <?=($_SERVER['PHP_SELF']=='/admin.php')? "active":""?>">
                 <a class="nav-link" href="./admin.php">Admninistration</a>
-            </li>
+            </li> -->
         </ul>
         <div class="nav-item white-text dropdown" style="float: right !important;">
-            <a class="nav-link user dropdown-toggle" target="#" id="navbarDropdown" role="button" 
+            <a class="nav-link user dropdown-toggle" target="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?=$_SESSION['name']." ".$_SESSION['lname']." (".$role.")"?>
+                <?=$_SESSION['username']." (".$role.")"?>
             </a>
             <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdown" >
-                <a class="dropdown-item" href="./php/logoutAction.php">Logout</a>
+                <a class="dropdown-item" href="php/logoutAction.php">Logout</a>
             </div>
         </div>
     </div>
