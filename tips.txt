@@ -7,3 +7,9 @@ When "xxx.xxx.xxx.xxx host is not allowed to connect to MySQL Server", do this:
     . SELECT host FROM mysql.user;
 --> You 'll be fine ;)
 --> Otherwise, pray
+
+
+To connect to keyrock, login as:
+ADMIN: u admin@test.com p nimda
+CINEMAOWNER: u admin1@test.com p nimda
+USER: u sotos.kavvouras@gmail.com p lalala
